@@ -38,6 +38,7 @@ def nms(
     boxes, 
     iou_threshold=0.5, 
     conf=0.25,
+    xywh=False
     ):
     """
     Perform Non-Maximum Suppression (NMS) on the bounding boxes.
@@ -67,12 +68,11 @@ def nms(
             if box[0] != chosen_box[0]
             or iou(
                 torch.tensor(box[2:]).unsqueeze(0),
-                torch.tensor(chosen_box[2:]).unsqueeze(0)
+                torch.tensor(chosen_box[2:]).unsqueeze(0),
+                xywh=xywh
             ) < iou_threshold
         ]
 
-        print(keep)
-        print('------------------')
         boxes_after_nms.append(chosen_box)
     
     return boxes_after_nms

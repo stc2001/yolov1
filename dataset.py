@@ -24,6 +24,7 @@ class Dataset(torch.utils.data.Dataset):
         label = os.path.join(self.path, self.mode, 'labels', self.labels[index])
         boxes = self.check_txtfile(label)
 
+
         image = os.path.join(self.path, self.mode, 'images', self.images[index])
         image = Image.open(image)
         boxes = torch.tensor(boxes)
@@ -49,7 +50,7 @@ class Dataset(torch.utils.data.Dataset):
                 )
                 label_matrix[i, j, class_id] = 1
                 
-        return  image, label_matrix
+        return  image, label_matrix, len(boxes)
 
     def check_txtfile(self, txtfile):
         # check if txtfile exist
