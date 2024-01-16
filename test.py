@@ -43,11 +43,14 @@ def plot_image(image, boxes):
     plt.show()
 
 
+
+S = 33
 transform = Compose([transforms.Resize((448, 448)), transforms.ToTensor()])
 train_data = Dataset(
     path='../DATA',
     mode='train',
     C=12,
+    S=S,
     transform=transform
 )
 
@@ -61,23 +64,22 @@ all_boxes = []
 train_idx = 0
 for batch_idx, (x, labels, num_boxes) in enumerate(trainloader):
     converted_boxes = convert_trueboxes(
-        labels, S=7, C=12
+        labels, S=S, C=12
     )
 
     true_boxes = cellboxes_to_boxes(
-        converted_boxes, S=7
+        converted_boxes, S=S
     )
 
     batch_size = x.shape[0]
     for idx in range(batch_size):
         boxes = []
         for box in true_boxes[idx]:
-            print(box[1])
             if box[1] > 0.5:
                 boxes.append(box)
             all_boxes += boxes
 
-        print(num_boxes[idx])
+        print(f"{num_boxes[idx]} - {len(boxes)}")
         plot_image(x[idx].permute(1,2,0).to("cpu"), boxes)
         train_idx += 0
 
